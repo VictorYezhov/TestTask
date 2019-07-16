@@ -1,14 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".screens.bounds_choosing.BoundsChoosingFragment">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:background="@color/colorPrimaryDark"
+                                                   android:layout_height="match_parent"
+                                                   tools:context=".screens.bounds_choosing.BoundsChoosingFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
+    <Button
+            android:id="@+id/submit_button"
+            android:text="@string/submit"
+            android:fontFamily="@font/poppins_regular"
+            android:background="@drawable/submit_button_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorAccent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginBottom="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment"/>
+            android:text="@string/please_enter_bounds"
+            android:layout_width="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="@color/colorPrimary"
+            android:gravity="center"
+            android:textSize="@dimen/main_text_size"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="32dp" android:layout_marginEnd="32dp" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/submit_button" app:layout_constraintVertical_bias="0.22000003"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:backgroundTint="@color/colorPrimary"
+            android:background="@drawable/submit_button_background"
+            android:hint="@string/lower_bound_hint"
+            android:id="@+id/lower_bound" app:layout_constraintStart_toEndOf="@+id/upper_bound"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/submit_button"/>
 
-</FrameLayout>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:background="@drawable/submit_button_background"
+            android:hint="@string/upper_bound_hint"
+            android:backgroundTint="@color/colorPrimary"
+            android:id="@+id/upper_bound" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/lower_bound" app:layout_constraintTop_toBottomOf="@+id/textView"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/submit_button"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

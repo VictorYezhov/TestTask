@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">KeyToTechTestTask</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="submit">Submit</string>
+    <string name="please_enter_bounds">Please enter bounds in which comments should be loaded</string>
+    <string name="lower_bound_hint">Lower Bound</string>
+    <string name="upper_bound_hint">Upper Bound</string>
 </resources>
