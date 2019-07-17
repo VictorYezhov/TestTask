@@ -46,24 +46,24 @@ class CommentsDataViewModel(app:Application) : AndroidViewModel(app){
         }
         prevPage = page
 
-        var lowerBound = lowerBoundLiveData.value ?: throw Exception("Something terribly wrong")
-        var upperBound: Int
+        var localLowerBound = lowerBoundLiveData.value ?: throw Exception("Something terribly wrong")
+        var localUpperBound: Int
 
         if(LOAD_AMMOUNT > upperBoundLiveData.value!!){
             loadFromApi(lowerBoundLiveData.value!!,upperBoundLiveData.value!!, upperBoundLiveData.value!!- lowerBoundLiveData.value!!)
             prevPage+=1
         }else {
-            lowerBound += (page) * LOAD_AMMOUNT
-            upperBound = lowerBound + LOAD_AMMOUNT
-            if (lowerBound >= upperBoundLiveData.value!!) {
+            localLowerBound += (page) * LOAD_AMMOUNT
+            localUpperBound = localLowerBound + LOAD_AMMOUNT
+            if (localLowerBound >= upperBoundLiveData.value!!) {
                 commentsLiveData.value = CommentsData.empty()
                 return
             }
-            if (upperBound > upperBoundLiveData.value!!) {
+            if (localUpperBound > upperBoundLiveData.value!!) {
 
-                loadFromApi(lowerBound, upperBoundLiveData.value!!, upperBound - lowerBound)
+                loadFromApi(localLowerBound, upperBoundLiveData.value!!, localUpperBound - localLowerBound)
             }else {
-                loadFromApi(lowerBound, upperBound, LOAD_AMMOUNT)
+                loadFromApi(localLowerBound, localUpperBound, LOAD_AMMOUNT)
             }
         }
     }
