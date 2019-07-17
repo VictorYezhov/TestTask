@@ -1,38 +1,41 @@
 package com.keytotech.task.screens.comments
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.keytotech.task.R
+import com.keytotech.task.api.CommentLoadAdi
+import com.keytotech.task.main.NavigationController
+import com.keytotech.task.model.CommentsDataViewModel
 
-import com.keytotech.task.screens.comments.dummy.DummyContent
-import com.keytotech.task.screens.comments.dummy.DummyContent.DummyItem
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_comment_list.*
+import org.koin.android.ext.android.inject
 
-/**
- * A fragment representing a list of Items.
- * Activities containing this fragment MUST implement the
- * [CommentsFragment.OnListFragmentInteractionListener] interface.
- */
+
 class CommentsFragment : Fragment() {
 
-    // TODO: Customize parameters
-    private var columnCount = 1
 
-    private var listener: OnListFragmentInteractionListener? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
+    companion object {
+        private const val TAG = "CommentsFragment"
     }
+
+    private  lateinit var scrollListener: EndlessRecyclerViewScrollListener
+    private lateinit var commentsDataViewModel: CommentsDataViewModel
+    private lateinit var navigator : NavigationController
+
+    val adapter = MyCommentRecyclerViewAdapter(
+       ArrayList()
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,64 +43,47 @@ class CommentsFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_comment_list, container, false)
 
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = MyCommentRecyclerViewAdapter(
-                    DummyContent.ITEMS,
-                    listener
-                )
+        commentsDataViewModel = activity?.run {
+            ViewModelProviders.of(this).get(CommentsDataViewModel::class.java)
+        } ?: throw Exception("Invalid Fragment")
+
+        navigator = activity?.run {
+            ViewModelProviders.of(this).get(NavigationController::class.java)
+        } ?: throw Exception("Invalid Fragment")
+
+
+        requireActivity().onBackPressedDispatcher.addCallback(this,  object :OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+               Log.i(TAG, "OnBackPressed")
+                commentsDataViewModel.clear()
+                navigator.navigate(R.id.action_commentsFragment_to_boundsChoosingFragment)
             }
-        }
+        })
         return view
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnListFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
-        }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        loading_layout.visibility =View.VISIBLE
+        initCommentsList()
+        commentsDataViewModel.getCommentsData().observe(this, Observer {
+            adapter.appendItems(it.comments)
+            loading_layout.visibility = View.GONE
+        })
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
+    private fun initCommentsList(){
+        val linearLayoutManager = LinearLayoutManager(context)
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson
-     * [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-    interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: DummyItem?)
-    }
-
-    companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            CommentsFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
+        comments_list.adapter = adapter
+        comments_list.setLayoutManager(linearLayoutManager)
+        scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
+                loading_layout.visibility =View.VISIBLE
+                commentsDataViewModel.loadComments(page)
             }
+        }
+        comments_list.addOnScrollListener(scrollListener)
+        commentsDataViewModel.loadComments(0)
     }
 }

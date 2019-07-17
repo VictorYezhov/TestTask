@@ -19,5 +19,8 @@
                 app:destination="@id/commentsFragment"/>
     </fragment>
     <fragment android:id="@+id/commentsFragment" android:name="com.keytotech.task.screens.comments.CommentsFragment"
-              android:label="fragment_comment_list" tools:layout="@layout/fragment_comment_list"/>
+              android:label="fragment_comment_list" tools:layout="@layout/fragment_comment_list">
+        <action android:id="@+id/action_commentsFragment_to_boundsChoosingFragment"
+                app:destination="@id/boundsChoosingFragment"/>
+    </fragment>
 </navigation>

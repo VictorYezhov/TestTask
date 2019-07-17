@@ -5,4 +5,5 @@
     <string name="please_enter_bounds">Please enter bounds in which comments should be loaded</string>
     <string name="lower_bound_hint">Lower Bound</string>
     <string name="upper_bound_hint">Upper Bound</string>
+    <string name="error_text">Please enter valid bounds</string>
 </resources>
