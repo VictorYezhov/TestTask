@@ -41,7 +41,7 @@ class MyCommentRecyclerViewAdapter(
     }
     override fun getItemCount(): Int = mValues.size
 
-    inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
+    inner class ViewHolder(mView: View) : RecyclerView.ViewHolder(mView) {
         val id: TextView = mView.comment_id
         val name: TextView = mView.name
         val body: TextView = mView.body
