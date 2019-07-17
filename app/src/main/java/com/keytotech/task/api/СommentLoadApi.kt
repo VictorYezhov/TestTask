@@ -16,25 +16,25 @@ interface CommentLoadApiClient {
     fun loadComment(@Query("id") id:Int) : Single<List<Comment>>
 }
 
-interface CommentLoadAdi{
+interface CommentLoadApi{
     fun loadComment(id:Int) : Single<List<Comment>>
 }
 
-class CommentAdiImpl : CommentLoadAdi{
+class CommentApiImpl : CommentLoadApi{
 
     private val apiClient: CommentLoadApiClient
     companion object {
         private const val BASE_URL = "http://jsonplaceholder.typicode.com"
     }
     init {
-      //  val logInterceptor = HttpLoggingInterceptor { message -> Log.w("Retrofit", message) }
-       // logInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        val logInterceptor = HttpLoggingInterceptor { message -> Log.w("Retrofit", message) }
+        logInterceptor.level = HttpLoggingInterceptor.Level.BODY
         val retrofit = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
-           //         .addInterceptor(logInterceptor)
+                    .addInterceptor(logInterceptor)
                     .build())
             .baseUrl(BASE_URL)
             .build()

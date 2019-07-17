@@ -21,7 +21,8 @@ class BoundsChoosingViewModel : ViewModel(){
         errorCheckerLiveData.value = !(!lower.isBlank()
                 && !upper.isBlank()
                 && lower.toIntOrNull() != null
-                && upper.toIntOrNull() != null)
+                && upper.toIntOrNull() != null
+                && lower.toInt() < upper.toInt())
     }
 
 

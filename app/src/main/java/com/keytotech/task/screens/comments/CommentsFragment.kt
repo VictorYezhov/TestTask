@@ -12,14 +12,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.keytotech.task.R
-import com.keytotech.task.api.CommentLoadAdi
 import com.keytotech.task.main.NavigationController
 import com.keytotech.task.model.CommentsDataViewModel
 
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_comment_list.*
-import org.koin.android.ext.android.inject
 
 
 class CommentsFragment : Fragment() {

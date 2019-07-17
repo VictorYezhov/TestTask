@@ -15,18 +15,18 @@ class MainActivity : AppCompatActivity() {
     }
     private lateinit var navigator : NavigationController
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.i(TAG, "onCreate")
+
         navigator = ViewModelProviders.of(this).get(NavigationController::class.java)
 
         navigator.getNavigationActions().observe(this, Observer { actionId ->
 
             Log.i(TAG, "navigationActionObserver, navigation action id: $actionId")
             Navigation.findNavController(this, R.id.nav_host_fragment).navigate(actionId)
+
         })
     }
 }

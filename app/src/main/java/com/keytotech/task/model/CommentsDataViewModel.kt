@@ -5,7 +5,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.keytotech.task.api.CommentLoadAdi
+import com.keytotech.task.api.CommentLoadApi
 import com.keytotech.task.data.CommentsData
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,7 +25,7 @@ class CommentsDataViewModel(app:Application) : AndroidViewModel(app){
     private val lowerBoundLiveData = MutableLiveData<Int>()
     private val upperBoundLiveData = MutableLiveData<Int>()
     private val commentsLiveData = MutableLiveData<CommentsData>()
-    private val commentLoadAdi : CommentLoadAdi  = app.getKoin().get()
+    private val commentLoadApi : CommentLoadApi  = app.getKoin().get()
     private val disposables = CompositeDisposable()
 
     fun getCommentsData() = commentsLiveData
@@ -68,7 +68,6 @@ class CommentsDataViewModel(app:Application) : AndroidViewModel(app){
         }
     }
 
-
     private fun loadFromApi(startId: Int, endId:Int, size: Int){
         Log.i(TAG, "loadFromApi  current slice: from: $startId to $endId")
 
@@ -77,7 +76,7 @@ class CommentsDataViewModel(app:Application) : AndroidViewModel(app){
             .flatMap {
                 Log.i(TAG, "loadComments, id: $it")
 
-                val comments =  commentLoadAdi.loadComment(it).toObservable()
+                val comments =  commentLoadApi.loadComment(it).toObservable()
 
                 Observable.fromArray(CommentsData.fromList(comments.blockingSingle()))
             }
